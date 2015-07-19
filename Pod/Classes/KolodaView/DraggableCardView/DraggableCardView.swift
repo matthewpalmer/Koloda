@@ -211,9 +211,11 @@ public class DraggableCardView: UIView {
             self.transform = scaleTransform
             center = CGPoint(x: originalLocation.x + xDistanceFromCenter, y: originalLocation.y + yDistanceFromCenter)
             
-            updateOverlayWithFinishPercent(xDistanceFromCenter / frame.size.width)
-            //100% - for proportion
-            delegate?.cardDraggedWithFinishPercent(self, percent: min(fabs(xDistanceFromCenter * 100 / frame.size.width), 100))
+//            updateOverlayWithFinishPercent(xDistanceFromCenter / frame.size.width)
+//            //100% - for proportion
+//            delegate?.cardDraggedWithFinishPercent(self, percent: min(fabs(xDistanceFromCenter * 100 / frame.size.width), 100))
+            updateOverlayWithFinishPercent(-yDistanceFromCenter / frame.size.height)
+            delegate?.cardDraggedWithFinishPercent(self, percent: min(fabs(yDistanceFromCenter * 100 / frame.size.height), 100))
             
             break
         case .Ended:
@@ -244,6 +246,10 @@ public class DraggableCardView: UIView {
             rightAction()
         } else if xDistanceFromCenter < -actionMargin {
             leftAction()
+        } else if yDistanceFromCenter > actionMargin {
+            downAction()
+        } else if yDistanceFromCenter < -actionMargin {
+            upAction()
         } else {
             resetViewPositionAndTransformations()
         }
@@ -253,46 +259,37 @@ public class DraggableCardView: UIView {
         let finishY = originalLocation.y + yDistanceFromCenter
         let finishPoint = CGPoint(x: CGRectGetWidth(UIScreen.mainScreen().bounds) * 2, y: finishY)
         
-        self.overlayView?.overlayState = OverlayMode.Right
-        self.overlayView?.alpha = 1.0
-        
-        UIView.animateWithDuration(NSTimeInterval(cardSwipeActionAnimationDuration),
-            delay: 0.0,
-            options: .CurveLinear,
-            animations: {
-                self.center = finishPoint
-                
-            },
-            completion: {
-                _ in
-                
-                self.dragBegin = false
-                self.delegate?.cardSwippedInDirection(self, direction: SwipeResultDirection.Right)
-                self.removeFromSuperview()
-        })
+        mutateOverlayViewForActionWithState(.Right)
+        animateActionInDirection(.Right, finishPoint: finishPoint)
     }
     
     private func leftAction() {
         let finishY = originalLocation.y + yDistanceFromCenter
         let finishPoint = CGPoint(x: -CGRectGetWidth(UIScreen.mainScreen().bounds), y: finishY)
         
-        self.overlayView?.overlayState = OverlayMode.Left
-        self.overlayView?.alpha = 1.0
+        mutateOverlayViewForActionWithState(.Left)
+        animateActionInDirection(.Left, finishPoint: finishPoint)
+    }
+    
+    private func upAction() {
+        let finishX = originalLocation.x + xDistanceFromCenter
+        let finishPoint = CGPoint(x: finishX, y: -CGRectGetHeight(UIScreen.mainScreen().bounds))
         
-        UIView.animateWithDuration(NSTimeInterval(cardSwipeActionAnimationDuration),
-            delay: 0.0,
-            options: .CurveLinear,
-            animations: {
-                self.center = finishPoint
-                
-            },
-            completion: {
-                _ in
-                
-                self.delegate?.cardSwippedInDirection(self, direction: SwipeResultDirection.Left)
-                self.dragBegin = false
-                self.removeFromSuperview()
-        })
+        mutateOverlayViewForActionWithState(.Right)
+        animateActionInDirection(.Up, finishPoint: finishPoint)
+    }
+    
+    private func downAction() {
+        let finishX = originalLocation.x + xDistanceFromCenter
+        let finishPoint = CGPoint(x: finishX, y: 2 * CGRectGetHeight(UIScreen.mainScreen().bounds))
+        
+        mutateOverlayViewForActionWithState(.Left)
+        animateActionInDirection(.Down, finishPoint: finishPoint)
+    }
+    
+    private func mutateOverlayViewForActionWithState(state: OverlayMode) {
+        self.overlayView?.overlayState = state
+        self.overlayView?.alpha = 1.0
     }
     
     private func resetViewPositionAndTransformations() {
@@ -332,52 +329,69 @@ public class DraggableCardView: UIView {
         })
     }
     
-    //MARK: Public
+    private func animateActionInDirection(direction: SwipeResultDirection, finishPoint: CGPoint) {
+        UIView.animateWithDuration(NSTimeInterval(cardSwipeActionAnimationDuration),
+            delay: 0.0,
+            options: .CurveLinear,
+            animations: {
+                self.center = finishPoint
+                
+            },
+            completion: {
+                _ in
+                
+                self.delegate?.cardSwippedInDirection(self, direction: direction)
+                self.dragBegin = false
+                self.removeFromSuperview()
+        })
+    }
     
+    private func swipeInDirection(direction: SwipeResultDirection, finishPoint: CGPoint, withTransform transform: CGAffineTransform) {
+        UIView.animateWithDuration(NSTimeInterval(cardSwipeActionAnimationDuration), delay: 0.0, options: .CurveLinear, animations: {
+            self.center = finishPoint
+            self.transform = transform
+            
+            return
+            }, completion: {
+                _ in
+                
+                self.removeFromSuperview()
+                self.delegate?.cardSwippedInDirection(self, direction: direction)
+                
+                return
+        })
+    }
+    
+    //MARK: Public
     func swipeLeft () {
         if !dragBegin {
-            
             let finishPoint = CGPoint(x: -CGRectGetWidth(UIScreen.mainScreen().bounds), y: center.y)
-            
-            UIView.animateWithDuration(NSTimeInterval(cardSwipeActionAnimationDuration),
-                delay: 0.0,
-                options: .CurveLinear,
-                animations: {
-                    self.center = finishPoint
-                    self.transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_4))
-                    
-                    return
-                },
-                completion: {
-                    _ in
-                    
-                    self.removeFromSuperview()
-                    self.delegate?.cardSwippedInDirection(self, direction: SwipeResultDirection.Left)
-                    
-                    return
-            })
+            let transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_4))
+            swipeInDirection(.Left, finishPoint: finishPoint, withTransform: transform)
         }
     }
     
     func swipeRight () {
         if !dragBegin {
-            
             let finishPoint = CGPoint(x: CGRectGetWidth(UIScreen.mainScreen().bounds) * 2, y: center.y)
-            
-            UIView.animateWithDuration(NSTimeInterval(cardSwipeActionAnimationDuration), delay: 0.0, options: .CurveLinear, animations: {
-                    self.center = finishPoint
-                    self.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_4))
-                    
-                    return
-                },
-                completion: {
-                    _ in
-                    
-                    self.removeFromSuperview()
-                    self.delegate?.cardSwippedInDirection(self, direction: SwipeResultDirection.Right)
-                    
-                    return
-            })
+            let transform = CGAffineTransformMakeRotation(CGFloat(M_PI_4))
+            swipeInDirection(.Right, finishPoint: finishPoint, withTransform: transform)
+        }
+    }
+    
+    func swipeUp() {
+        if !dragBegin {
+            let finishPoint = CGPoint(x: center.x, y: -CGRectGetHeight(UIScreen.mainScreen().bounds))
+            let transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_4))
+            swipeInDirection(.Down, finishPoint: finishPoint, withTransform: transform)
+        }
+    }
+    
+    func swipeDown () {
+        if !dragBegin {
+            let finishPoint = CGPoint(x: center.x, y: CGRectGetHeight(UIScreen.mainScreen().bounds) * 2)
+            let transform = CGAffineTransformMakeRotation(CGFloat(M_PI_4))
+            swipeInDirection(.Up, finishPoint: finishPoint, withTransform: transform)
         }
     }
 }

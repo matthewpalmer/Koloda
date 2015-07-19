@@ -13,6 +13,8 @@ public enum SwipeResultDirection {
     case None
     case Left
     case Right
+    case Up
+    case Down
 }
 
 //Default values
@@ -465,6 +467,10 @@ public class KolodaView: UIView, DraggableCardDelegate {
                     frontCard.swipeLeft()
                 case SwipeResultDirection.Right:
                     frontCard.swipeRight()
+                case SwipeResultDirection.Up:
+                    frontCard.swipeUp()
+                case SwipeResultDirection.Down:
+                    frontCard.swipeDown()
                 }
                 
                 if visibleCards.count > 1 {
