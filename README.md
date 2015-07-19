@@ -111,7 +111,7 @@ Return a view for card overlay at the specified index. For setting custom overla
 
 The KolodaViewDelegate protocol has the following methods:
 ```swift    
-    func kolodaDidSwipedCardAtIndex(koloda: KolodaView,index: UInt, direction: SwipeResultDirection)
+    func kolodaDidSwipeCardAtIndex(koloda: KolodaView,index: UInt, direction: SwipeResultDirection)
 ```    
 This method is called whenever the KolodaView swipes card. It is called regardless of whether the card was swiped programatically or through user interaction.
 ```swift

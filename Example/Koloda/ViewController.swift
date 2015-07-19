@@ -52,7 +52,7 @@ class ViewController: UIViewController, KolodaViewDataSource, KolodaViewDelegate
     
     //MARK: KolodaViewDelegate
     
-    func kolodaDidSwipedCardAtIndex(koloda: KolodaView, index: UInt, direction: SwipeResultDirection) {
+    func kolodaDidSwipeCardAtIndex(koloda: KolodaView, index: UInt, direction: SwipeResultDirection) {
     //Example: loading more cards
         if index >= 3 {
             numberOfCards = 6

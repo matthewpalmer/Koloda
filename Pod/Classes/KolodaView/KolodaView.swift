@@ -55,7 +55,7 @@ public protocol KolodaViewDataSource:class {
 
 public protocol KolodaViewDelegate:class {
     
-    func kolodaDidSwipedCardAtIndex(koloda: KolodaView,index: UInt, direction: SwipeResultDirection)
+    func kolodaDidSwipeCardAtIndex(koloda: KolodaView,index: UInt, direction: SwipeResultDirection)
     func kolodaDidRunOutOfCards(koloda: KolodaView)
     func kolodaDidSelectCardAtIndex(koloda: KolodaView, index: UInt)
     func kolodaShouldApplyAppearAnimation(koloda: KolodaView) -> Bool
@@ -320,7 +320,7 @@ public class KolodaView: UIView, DraggableCardDelegate {
                     frameAnimation.completionBlock = {(_, _) in
                         self.visibleCards.last?.hidden = false
                         self.animating = false
-                        self.delegate?.kolodaDidSwipedCardAtIndex(self, index: UInt(self.currentCardNumber - 1), direction: direction)
+                        self.delegate?.kolodaDidSwipeCardAtIndex(self, index: UInt(self.currentCardNumber - 1), direction: direction)
                     }
                     currentCard.alpha = alphaValueOpaque
                 }
@@ -331,7 +331,7 @@ public class KolodaView: UIView, DraggableCardDelegate {
                 currentCard.pop_addAnimation(frameAnimation, forKey: "frameAnimation")
             }
         } else {
-            delegate?.kolodaDidSwipedCardAtIndex(self, index: UInt(currentCardNumber - 1), direction: direction)
+            delegate?.kolodaDidSwipeCardAtIndex(self, index: UInt(currentCardNumber - 1), direction: direction)
             animating = false
             self.delegate?.kolodaDidRunOutOfCards(self)
         }
