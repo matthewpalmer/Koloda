@@ -54,7 +54,8 @@ public protocol KolodaViewDataSource:class {
 }
 
 public protocol KolodaViewDelegate:class {
-    
+    /// Note that this method might not be called for the very first card in the koloda view
+    func kolodaDidPresentCardAtIndex(koloda: KolodaView, index: UInt)
     func kolodaDidSwipeCardAtIndex(koloda: KolodaView,index: UInt, direction: SwipeResultDirection)
     func kolodaDidRunOutOfCards(koloda: KolodaView)
     func kolodaDidSelectCardAtIndex(koloda: KolodaView, index: UInt)
@@ -334,6 +335,7 @@ public class KolodaView: UIView, DraggableCardDelegate {
             self.delegate?.kolodaDidRunOutOfCards(self)
         }
         
+        self.delegate?.kolodaDidPresentCardAtIndex(self, index: UInt(currentCardNumber))
     }
     
     public func revertAction() {

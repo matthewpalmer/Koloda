@@ -52,6 +52,10 @@ class ViewController: UIViewController, KolodaViewDataSource, KolodaViewDelegate
     
     //MARK: KolodaViewDelegate
     
+    func kolodaDidPresentCardAtIndex(koloda: KolodaView, index: UInt) {
+        println("Did present card at index \(index)")
+    }
+    
     func kolodaDidSwipeCardAtIndex(koloda: KolodaView, index: UInt, direction: SwipeResultDirection) {
     //Example: loading more cards
         if index >= 3 {
