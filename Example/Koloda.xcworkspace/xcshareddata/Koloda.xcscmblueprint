@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "231114403EF15DED09DE9577FA23E6D43184B00E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "231114403EF15DED09DE9577FA23E6D43184B00E" : 0,
+    "3AAD7B5C01D3EDD9F5C662C5C2B4FFA1AA2DA329" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "F3AD0B40-D0F3-4D54-924C-30047FE9BC76",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "231114403EF15DED09DE9577FA23E6D43184B00E" : "Koloda",
+    "3AAD7B5C01D3EDD9F5C662C5C2B4FFA1AA2DA329" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Koloda",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/Koloda.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Yalantis\/Koloda.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "231114403EF15DED09DE9577FA23E6D43184B00E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mish15\/trenda-mob.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3AAD7B5C01D3EDD9F5C662C5C2B4FFA1AA2DA329"
+    }
+  ]
+}
